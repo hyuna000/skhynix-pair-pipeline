@@ -1,0 +1,27 @@
+{
+ "table": "daily_pnl_log",
+ "grain": "calendar trading_date x candidate x gate_rule (주 7일, 무거래일 0)",
+ "schema_version": 1,
+ "columns": {
+  "run_id": "str  백테스트 실행 ID",
+  "gate_run_id": "str  입력으로 쓴 daily_decision_log 의 run_id",
+  "config_hash": "str",
+  "code_version": "str",
+  "data_snapshot_id": "str",
+  "trading_date": "str",
+  "candidate": "str",
+  "gate_rule": "str",
+  "status": "str  TRADE | NO_TRADE 사유 | NO_DATA",
+  "capital_usd": "float",
+  "n_trades": "int",
+  "net_pnl": "float  실제 계좌 (무거래일 0)",
+  "ret": "float  net_pnl / C",
+  "ret_cost1_5": "float",
+  "ret_cost2": "float",
+  "ret_fee_alt": "float  대체 수수료 기준 일 수익률 (실거래일만)",
+  "hypo_n_trades": "int",
+  "hypo_net_pnl": "float  게이트 무시 가상 계좌",
+  "hypo_ret": "float",
+  "hypo_net_pnl_fee_alt": "float  게이트 무시 가상 매매의 대체 수수료 기준 순손익"
+ }
+}

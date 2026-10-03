@@ -1,0 +1,25 @@
+{
+  "table": "signal_log",
+  "grain": "threshold-breach minute x gate_rule",
+  "schema_version": 1,
+  "columns": {
+    "run_id": "str  백테스트 실행 ID",
+    "gate_run_id": "str  입력으로 쓴 daily_decision_log 의 run_id",
+    "config_hash": "str",
+    "code_version": "str",
+    "data_snapshot_id": "str",
+    "trading_date": "str",
+    "candidate": "str",
+    "gate_rule": "str",
+    "minute_utc": "str",
+    "minute_kst": "str",
+    "z": "float",
+    "direction": "str",
+    "episode_id": "int",
+    "is_first_in_episode": "bool",
+    "regime": "str",
+    "executed": "bool  실제 체결 (is_real 일 때만 True 가능)",
+    "hypothetical_executed": "bool  가상 계좌 기준 체결",
+    "skip_reason": "str  GATE_FAIL | COST_FILTER | ALREADY_IN_POSITION | NOT_ARMED | AFTER_CUTOFF | FUNDING_BLACKOUT | (비게이트 사유)"
+  }
+}

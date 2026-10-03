@@ -26,7 +26,8 @@ def _levels(arr):
     return [(float(x["price"]), float(x["quantity"])) for x in arr]
 
 
-def reconstruct(df: pd.DataFrame, warmup_sec: float = 60.0, snapshot: pd.DataFrame | None = None) -> pd.DataFrame:
+def reconstruct(df: pd.DataFrame, warmup_sec: float = 60.0, snapshot: pd.DataFrame | None = None,
+                depth: int = 20) -> pd.DataFrame:
     df = df.drop_duplicates("event_id").sort_values(["final_update_id"]).reset_index(drop=True)
     bids: dict[float, float] = {}
     asks: dict[float, float] = {}
@@ -44,8 +45,11 @@ def reconstruct(df: pd.DataFrame, warmup_sec: float = 60.0, snapshot: pd.DataFra
         ba = min(asks) if asks else np.nan
         if valid and not bb < ba:
             valid = False
+        tb = sorted(bids.items(), key=lambda kv: -kv[0])[:depth] if valid else []
+        ta = sorted(asks.items(), key=lambda kv: kv[0])[:depth] if valid else []
         rows.append((minute, bb, ba, last_recv, n_ev, seg, bool(valid),
-                     len(bids), len(asks)))
+                     len(bids), len(asks),
+                     [p for p, _ in tb], [q for _, q in tb], [p for p, _ in ta], [q for _, q in ta]))
 
     src = df["source_ts_ns"].to_numpy()
     prev = df["previous_update_id"].to_numpy()
@@ -80,11 +84,25 @@ def reconstruct(df: pd.DataFrame, warmup_sec: float = 60.0, snapshot: pd.DataFra
     if cur_min is not None:
         emit(cur_min, cur_min + NS_MIN - 1)
     out = pd.DataFrame(rows, columns=["open_ts_ns", "best_bid", "best_ask", "avail_ts_ns", "n_events",
-                                      "segment", "valid", "n_bid_levels", "n_ask_levels"])
+                                      "segment", "valid", "n_bid_levels", "n_ask_levels",
+                                      "bid_px", "bid_qty", "ask_px", "ask_qty"])
     out["mid"] = (out["best_bid"] + out["best_ask"]) / 2
     out["spread_bp"] = (out["best_ask"] - out["best_bid"]) / out["mid"] * 1e4
     out["ts_utc"] = pd.to_datetime(out["open_ts_ns"], utc=True)
     return out
+
+
+def book_vwap(px: list, qty: list, notional: float) -> tuple[float, bool]:
+    """호가 단계를 위에서부터 소진해 notional 달러어치 체결할 때의 평균가. (가격, 깊이 충분 여부)"""
+    remain, cost, filled = notional, 0.0, 0.0
+    for p, q in zip(px, qty):
+        take = min(q, remain / p)
+        cost += take * p
+        filled += take
+        remain -= take * p
+        if remain <= 1e-9:
+            return cost / filled, True
+    return (cost / filled if filled > 0 else float("nan")), False
 
 
 def build_mid_files(raw_ob_dir: str, out_dir: str, warmup_sec: float = 60.0) -> dict:

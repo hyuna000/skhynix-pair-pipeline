@@ -1,0 +1,25 @@
+{
+ "table": "funding_ledger",
+ "grain": "trade x settlement x gate_rule (정상이라면 비어 있음)",
+ "schema_version": 1,
+ "columns": {
+  "run_id": "str  백테스트 실행 ID",
+  "gate_run_id": "str  입력으로 쓴 daily_decision_log 의 run_id",
+  "config_hash": "str",
+  "code_version": "str",
+  "data_snapshot_id": "str",
+  "trading_date": "str",
+  "candidate": "str",
+  "gate_rule": "str",
+  "is_real": "bool",
+  "settle_utc": "str",
+  "symbol": "str",
+  "leg_side": "int",
+  "rate": "float",
+  "notional": "float",
+  "mark_basis": "str",
+  "amount": "float  수취면 양수",
+  "rate_source": "str  data | MISSING_ASSUMED",
+  "trade_entry_utc": "str"
+ }
+}

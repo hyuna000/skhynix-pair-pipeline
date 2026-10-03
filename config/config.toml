@@ -80,5 +80,45 @@ base_seed = 20261003          # 거래일별 시드 = base_seed + YYYYMMDD, V1·
 weights = "rademacher"
 
 [params]
-max_half_life_min = 120       # 9절: 반감기 2시간 이하만 거래
+max_half_life_min = 120       # 9절: 반감기 2시간 이하만 거래. 근거(2026-10-03 갱신): 정산 사이 4시간(240분)의 절반. 60분이면 표본 전 일 탈락(최소 66분)
 half_life_method = "arma11"   # 2026-10-03 결정: 호가 잡음 보정 (ARMA(1,1)). AR(1) 값도 함께 기록
+
+# ------------------------------------------------------------------ 매매 (5·9·10절) --
+[funding]
+raw_dir = "data/raw_funding"
+# 펀딩 데이터가 없는 심볼의 가정 시각표 (계획서: 8시간, KST 01/09/17). 데이터가 있으면 실제 정산 시각에서 주기 추정.
+default_interval_hours = 8
+default_anchor_kst = "2026-09-01 01:00"
+buffer_sec = 60            # 5절: 정산 앞뒤 60초 동안 주문(진입·청산) 금지
+# 정산 때 포지션 처리. "exit" = 계획서 원안(정산 전 강제 청산), "hold" = 들고 넘기고 펀딩을 손익에 반영 (2026-10-03 팀 결정)
+# 근거: 가상 매매 36건 중 16건이 정산 전 강제 청산, 평균 -$13.9. 재진입 왕복 수수료 ~$10 > 펀딩 비용(대개 0, 최대 0.06%)
+policy = "hold"
+missing_rate = 0.0         # 펀딩률 기록이 없는 정산의 가정값 (기록 대부분 0). 펀딩 원장에 MISSING_ASSUMED 로 표시
+holding_window_sec = 15    # 10절: 정산 전후 15초 안에 포지션이 있으면 보유로 간주
+
+[trading]
+capital_usd = 10000        # 배정 자본 C (진입 시 두 레그 명목가치 합)
+qty_step = 0.001           # 최소 주문 단위 (계약 규격 미확인 -> 가정)
+rearm_after_stop = true    # 손절 뒤 |z| 가 진입선 안쪽으로 돌아와야 재진입
+nonlinear_thresholds = "linear"   # KSS(비선형) 버전 임계값: 1차는 선형과 동일 ("estar" 는 2차)
+
+[costs]
+taker_fee = 0.0005         # VIP0 taker 0.05%, 모든 체결 (팀 계정 수수료 등급 확인 전 가정)
+fee_alt = 0.0002           # 민감도: 지정가(maker) 0.02% 로 모두 체결됐다고 볼 때. 미체결 위험은 반영 안 함 -> 상한 참고용
+book_depth_levels = 20     # 오더북 VWAP 에 쓰는 호가 단계 수
+# 오더북이 없는 분: 다음 분봉 시가 체결 + 다리당 (반 스프레드 + extra_bp) 슬리피지
+half_spread_bp = { SKHYNIXUSDT = 0.04, SKHYUSDT = 0.27 }   # 09-18 오더북 재구성 실측 (스프레드 중앙값 / 2)
+extra_slippage_bp = 1.0
+forced_exit_slippage_mult = 2.0   # 강제 청산 슬리피지 배수
+cost_multipliers = [1.0, 1.5, 2.0] # 10절 민감도 (일별 손익에 배수별 열로 기록)
+
+[thresholds]
+entry_grid = [1.0, 1.25, 1.5, 1.75, 2.0, 2.25, 2.5, 2.75, 3.0]
+exit_grid = [-0.5, -0.25, 0.0, 0.25, 0.5]
+stop_grid = [3.0, 4.0, 5.0, 6.0, 99.0]   # 99 = 손절 없음
+n_paths = 1000
+seed = 20261004
+
+[evaluation]
+# 11절 평가를 돌리기 전 최소 거래일 수 (17일 표본에서 게이트 통과 0일 -> 평가 불가 판단, 2026-10-03)
+min_trading_days = 60
