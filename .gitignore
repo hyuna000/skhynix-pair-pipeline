@@ -1,0 +1,27 @@
+# 원자료·가공 데이터
+data/raw/*
+!data/raw/.gitkeep
+data/raw_orderbook/*
+!data/raw_orderbook/.gitkeep
+data/processed/
+data/processed_mid/
+data/synthetic/processed/
+
+# 실행 산출물 (재실행하면 다시 생김)
+logs/
+reports/*.out
+reports/audit_*.json
+reports/gate_summary_*.csv
+
+# 파이썬
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+venv/
+
+# OS / 에디터
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
