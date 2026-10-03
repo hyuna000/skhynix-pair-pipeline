@@ -1,0 +1,71 @@
+# 검정 파이프라인 설정 (연구계획 v3 의 6·7절, 부록 A)
+# 이 파일의 해시가 모든 로그 행의 config_hash 로 기록된다. 값을 바꾸면 결과가 다른 run 으로 구분된다.
+
+[symbols]
+local = "SKHYNIXUSDT"   # 본주 퍼프 (L)
+adr   = "SKHYUSDT"      # ADR 퍼프 (A)
+conversion_ratio = 0.1  # 1 ADS = 보통주 0.1주 -> 구조적 후보의 상수 ln(10)
+
+[paths]
+raw_dir       = "data/raw"
+processed_dir = "data/processed"
+log_dir       = "logs"
+report_dir    = "reports"
+
+[calendar]
+tz = "Asia/Seoul"
+day_start_hour = 8          # 거래일 D = [D 08:00, D+1 07:59]
+saturday_start_hour = 9     # 토요일 T0 = 09:00 (6절 연장 구간 확정 시각)
+window_mode = "continuous"  # "blocks" = 계획서 6절 | "continuous" = T0 직전 연속 N분 (주말·공휴일 포함)
+v1_minutes = 1440           # continuous 모드의 V1 / V2 길이 (blocks 모드에서는 6절 표를 따름)
+v2_minutes = 2880
+# 표본과 겹치는 휴장일만 (16절: 한국 연말 휴장 미확인)
+kr_holidays = ["2026-08-17", "2026-09-24", "2026-09-25", "2026-10-05", "2026-10-09"]
+us_holidays = ["2026-07-03", "2026-09-07", "2026-11-26", "2026-12-25"]
+
+[data_quality]
+max_missing_frac = 0.10     # 13절: 윈도우 결측 10% 초과 -> DATA_BAD
+enforce_missing_rule = false  # 2026-10-03 팀 결정: 결측 기준 사용 안 함 (결측 비율은 계속 기록)
+min_bars = 240              # 이보다 짧으면 검정 자체를 하지 않음 (DATA_BAD, TOO_SHORT)
+
+[step1]
+# 부록 A-5 (2): (a)(d) 엄격, (b)(c) 관대. 최종값은 14절 시뮬레이션으로 확정.
+alpha_a_level_adfgls = 0.01   # (a) 수준 ADF-GLS 비기각이어야 함
+alpha_b_level_kpss   = 0.10   # (b) 수준 KPSS 기각이어야 함
+alpha_c_diff_adfgls  = 0.10   # (c) 차분 ADF-GLS 기각이어야 함
+alpha_d_diff_kpss    = 0.01   # (d) 차분 KPSS 비기각이어야 함
+gls_cbar = -7.0               # ERS, 상수만
+kpss_ar_sum_cap = 0.995       # A-5 (4)
+# 게이트에 쓰는 조건. 계획서는 "abcd". 빠진 조건도 통계량·통과 여부는 step1_stats 에 기록된다.
+gate_conditions = "abd"
+# (b) 수준 KPSS 판정 방식. "bootstrap" = 계획서(A-2), "table" = 점근 임계값. 둘 다 계산·기록하고 판정만 이 값을 따름.
+kpss_b_method = "bootstrap"
+# Step 1 p 값 출처: "plan" = 조건별 스위치 사용 | "bootstrap" = 네 조건 모두 | "table" = 네 조건 모두 점근 표
+pvalue_mode = "table"
+# 조건 (c) 차분 ADF-GLS 의 래그 규칙. 계획서대로면 rmaic.
+# 주의: 분 수익률에 MAIC/RMAIC 를 쓰면 k 가 상한까지 가서 검정력이 크게 떨어진다
+# (참 I(1) 가격 시뮬레이션에서 약 43% 가 조건 c 에서 탈락). "bic" 로 바꾸면 해소. 연구자 결정 사항.
+diff_lag_criterion = "bic"  # "rmaic" | "maic" | "bic" | "aic"
+# (c) 판정 방식. "bootstrap" = 계획서(A-1), "table" = ERS 점근 임계값. 둘 다 기록, 판정만 이 값을 따름.
+adfgls_c_method = "bootstrap"
+
+[step3]
+alpha = 0.05                  # ADF 또는 KSS 중 하나라도 기각하면 통과
+# p 값 출처: "plan" = 계획서(후보1 MacKinnon, 나머지 부트스트랩) | "bootstrap" = 전부 | "table" = 전부 점근 표
+pvalue_mode = "table"
+dols_max_leads_lags = 5       # DOLS 리드·래그 후보 0..K, BIC 선택
+ols_pvalue_source = "mackinnon"   # 후보 1: MacKinnon EG 표 (부트스트랩은 대조용으로 함께 기록)
+struct_pvalue_source = "bootstrap" # 후보 4: A-1 부트스트랩 (표 p 도 기록)
+
+[lags]
+criterion = "rmaic"           # "maic" | "rmaic"
+kmax_rule = "schwert12"       # kmax = floor(12 (T/100)^(1/4))
+sieve_pmax = 30               # 부트스트랩 sieve AR/VAR 최대 차수 (AIC 선택)
+
+[bootstrap]
+B = 199                       # 예비 199 / 운영 999 / 최종 1999
+base_seed = 20261003          # 거래일별 시드 = base_seed + YYYYMMDD, V1·V2 공통 난수
+weights = "rademacher"
+
+[params]
+max_half_life_min = 120       # 9절: 반감기 2시간 이하만 거래

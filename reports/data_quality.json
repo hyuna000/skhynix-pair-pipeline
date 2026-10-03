@@ -1,0 +1,1013 @@
+{
+ "clean_stats": {
+  "rows_raw": 18007,
+  "rows_bar_1m": 18007,
+  "dup_event_id_removed": 0,
+  "dup_symbol_open_ts_removed": 0,
+  "unclosed_removed": 0,
+  "trading_date_mismatch": 0
+ },
+ "symbols": {
+  "SKHYNIXUSDT": {
+   "bars": 9187,
+   "first_kst": "2026-09-15 15:00:00+09:00",
+   "last_kst": "2026-10-01 19:46:00+09:00",
+   "backfill_share": 0.0134,
+   "zero_trade_bars": 27,
+   "collector_runs": 284,
+   "block_coverage": [
+    {
+     "block": "2026-09-15",
+     "bars": 345,
+     "coverage": 0.24
+    },
+    {
+     "block": "2026-09-18",
+     "bars": 339,
+     "coverage": 0.235
+    },
+    {
+     "block": "2026-09-19",
+     "bars": 530,
+     "coverage": 0.368
+    },
+    {
+     "block": "2026-09-20",
+     "bars": 792,
+     "coverage": 0.55
+    },
+    {
+     "block": "2026-09-21",
+     "bars": 17,
+     "coverage": 0.012
+    },
+    {
+     "block": "2026-09-22",
+     "bars": 845,
+     "coverage": 0.587
+    },
+    {
+     "block": "2026-09-23",
+     "bars": 213,
+     "coverage": 0.148
+    },
+    {
+     "block": "2026-09-25",
+     "bars": 1059,
+     "coverage": 0.735
+    },
+    {
+     "block": "2026-09-26",
+     "bars": 1433,
+     "coverage": 0.995
+    },
+    {
+     "block": "2026-09-27",
+     "bars": 658,
+     "coverage": 0.457
+    },
+    {
+     "block": "2026-09-29",
+     "bars": 994,
+     "coverage": 0.69
+    },
+    {
+     "block": "2026-09-30",
+     "bars": 1346,
+     "coverage": 0.935
+    },
+    {
+     "block": "2026-10-01",
+     "bars": 616,
+     "coverage": 0.428
+    }
+   ],
+   "bars_by_kst_hour_avg_per_block": {
+    "0": 35.8,
+    "1": 37.7,
+    "2": 29.1,
+    "3": 25.8,
+    "4": 25.2,
+    "5": 23.2,
+    "6": 22.2,
+    "7": 21.2,
+    "8": 17.1,
+    "9": 19.6,
+    "10": 20.4,
+    "11": 19.8,
+    "12": 26.8,
+    "13": 25.7,
+    "14": 25.4,
+    "15": 36.8,
+    "16": 41.5,
+    "17": 38.9,
+    "18": 38.5,
+    "19": 36.5,
+    "20": 34.1,
+    "21": 37.5,
+    "22": 34.8,
+    "23": 33.4
+   },
+   "gaps_over_5min": [
+    {
+     "after_kst": "2026-09-15 16:49:00+09:00",
+     "before_kst": "2026-09-15 16:56:00+09:00",
+     "missing_min": 6,
+     "run_before": "62095b1169414ca180268bad4785b279",
+     "run_after": "330f1e2dca774341a1e79b71cbfe6cae"
+    },
+    {
+     "after_kst": "2026-09-15 17:57:00+09:00",
+     "before_kst": "2026-09-15 18:05:00+09:00",
+     "missing_min": 7,
+     "run_before": "1a102675515d4dfbb26754cbeb2b31bf",
+     "run_after": "4db414f6622b4b7d8eab3cf7c325705e"
+    },
+    {
+     "after_kst": "2026-09-15 20:04:00+09:00",
+     "before_kst": "2026-09-15 20:10:00+09:00",
+     "missing_min": 5,
+     "run_before": "9b5162dd6e354e32830ed484e64bc2bf",
+     "run_after": "a0134329fd5241d693248d2871f7f818"
+    },
+    {
+     "after_kst": "2026-09-15 21:19:00+09:00",
+     "before_kst": "2026-09-15 21:25:00+09:00",
+     "missing_min": 5,
+     "run_before": "a9a0191cb1564407a8f53c64ee5e4b33",
+     "run_after": "ac1aa7b7a026498f9ebb8af970d3fc54"
+    },
+    {
+     "after_kst": "2026-09-15 22:08:00+09:00",
+     "before_kst": "2026-09-18 19:28:00+09:00",
+     "missing_min": 4159,
+     "run_before": "38c6ed82a0764edc84a4982dd3e7cd6d",
+     "run_after": "27435de06cf1473ab68737a100e7cb1d"
+    },
+    {
+     "after_kst": "2026-09-18 23:24:00+09:00",
+     "before_kst": "2026-09-18 23:30:00+09:00",
+     "missing_min": 5,
+     "run_before": "1f45cf1752434ef0a075d7137d2d266c",
+     "run_after": "436c7d32d15949b0b92c04e51b5171dc"
+    },
+    {
+     "after_kst": "2026-09-19 00:09:00+09:00",
+     "before_kst": "2026-09-19 00:16:00+09:00",
+     "missing_min": 6,
+     "run_before": "825e23f48cdd4aa49b12a3e1e7744d61",
+     "run_after": "db17c7c1aac14e46b125010d6594a692"
+    },
+    {
+     "after_kst": "2026-09-19 00:27:00+09:00",
+     "before_kst": "2026-09-19 00:35:00+09:00",
+     "missing_min": 7,
+     "run_before": "983a232466ed49a39eeb9954e1f5f81f",
+     "run_after": "fd20a4f53cef4c5782ca8491e01cde60"
+    },
+    {
+     "after_kst": "2026-09-19 00:44:00+09:00",
+     "before_kst": "2026-09-19 00:50:00+09:00",
+     "missing_min": 5,
+     "run_before": "fd20a4f53cef4c5782ca8491e01cde60",
+     "run_after": "1bf0a81b6b604c1f85e922586368f32f"
+    },
+    {
+     "after_kst": "2026-09-19 01:57:00+09:00",
+     "before_kst": "2026-09-19 21:10:00+09:00",
+     "missing_min": 1152,
+     "run_before": "357ec43914504073909599799704b173",
+     "run_after": "a947b50e784a4066903599ac3548b4a8"
+    },
+    {
+     "after_kst": "2026-09-19 21:14:00+09:00",
+     "before_kst": "2026-09-19 21:20:00+09:00",
+     "missing_min": 5,
+     "run_before": "a947b50e784a4066903599ac3548b4a8",
+     "run_after": "cda07223c3744be0a350895cb9182763"
+    },
+    {
+     "after_kst": "2026-09-19 23:51:00+09:00",
+     "before_kst": "2026-09-19 23:58:00+09:00",
+     "missing_min": 6,
+     "run_before": "84526ac4662048e18634e8d0fd7d4a1d",
+     "run_after": "93b6c49a50de4f58b370b9471b56d1d2"
+    },
+    {
+     "after_kst": "2026-09-20 00:13:00+09:00",
+     "before_kst": "2026-09-20 00:22:00+09:00",
+     "missing_min": 8,
+     "run_before": "8f94378473274ab9b398a93750771c38",
+     "run_after": "3942fa6392fc4cb5a63d3d43b4d28916"
+    },
+    {
+     "after_kst": "2026-09-20 02:06:00+09:00",
+     "before_kst": "2026-09-20 02:14:00+09:00",
+     "missing_min": 7,
+     "run_before": "85e2cc6169d54664babbd410819757b3",
+     "run_after": "7a877cd65d9c43a4aaa7e53f12df1818"
+    },
+    {
+     "after_kst": "2026-09-20 06:35:00+09:00",
+     "before_kst": "2026-09-20 06:42:00+09:00",
+     "missing_min": 6,
+     "run_before": "0ae31bcd37ca4ea091768dd62fa801ec",
+     "run_after": "56efecf732b240a78bd49d29f1202234"
+    },
+    {
+     "after_kst": "2026-09-20 08:45:00+09:00",
+     "before_kst": "2026-09-20 08:55:00+09:00",
+     "missing_min": 9,
+     "run_before": "1fc3fdaa17994503ac2e417ed40b4ee2",
+     "run_after": "3b44ea87a1814a3490d330bcf792ffd7"
+    },
+    {
+     "after_kst": "2026-09-20 09:53:00+09:00",
+     "before_kst": "2026-09-20 10:32:00+09:00",
+     "missing_min": 38,
+     "run_before": "a0387dc2e1054db8b875e12d039ccec7",
+     "run_after": "1e8263ac00d842deb1dcc28df2b4d7f1"
+    },
+    {
+     "after_kst": "2026-09-20 11:00:00+09:00",
+     "before_kst": "2026-09-20 11:25:00+09:00",
+     "missing_min": 24,
+     "run_before": "5ad9898757ad4d82b303af8932fee3d1",
+     "run_after": "73bf8c76f414430fa84abf40fd3285db"
+    },
+    {
+     "after_kst": "2026-09-20 13:21:00+09:00",
+     "before_kst": "2026-09-20 13:28:00+09:00",
+     "missing_min": 6,
+     "run_before": "9d309850e5204eb6ad34b1a5d22fe98b",
+     "run_after": "f083f1717164408a88438ed76860c92d"
+    },
+    {
+     "after_kst": "2026-09-20 13:29:00+09:00",
+     "before_kst": "2026-09-20 13:37:00+09:00",
+     "missing_min": 7,
+     "run_before": "f083f1717164408a88438ed76860c92d",
+     "run_after": "5d911e382a8a4473bede71823f0bd73f"
+    },
+    {
+     "after_kst": "2026-09-20 14:11:00+09:00",
+     "before_kst": "2026-09-20 14:19:00+09:00",
+     "missing_min": 7,
+     "run_before": "ae6bda1ae3a049a089ba9ea7f02ae5ae",
+     "run_after": "c007cfe4f21d4263b5c8cc7cde816189"
+    },
+    {
+     "after_kst": "2026-09-20 14:27:00+09:00",
+     "before_kst": "2026-09-20 14:36:00+09:00",
+     "missing_min": 8,
+     "run_before": "4e7003589c614f6d8164bb4716473cef",
+     "run_after": "c0ff212583d741e89bd91fd45af769fb"
+    },
+    {
+     "after_kst": "2026-09-20 14:43:00+09:00",
+     "before_kst": "2026-09-20 14:51:00+09:00",
+     "missing_min": 7,
+     "run_before": "8dc379e7d7114661b6beff2a3a687da4",
+     "run_after": "d300821492b249f5a916c7b84b5cde3a"
+    },
+    {
+     "after_kst": "2026-09-20 15:14:00+09:00",
+     "before_kst": "2026-09-20 15:20:00+09:00",
+     "missing_min": 5,
+     "run_before": "8b26284629344fec9a371928bfd1c646",
+     "run_after": "ef792896550d41d7ba4b37267e47d71a"
+    },
+    {
+     "after_kst": "2026-09-20 15:26:00+09:00",
+     "before_kst": "2026-09-20 15:35:00+09:00",
+     "missing_min": 8,
+     "run_before": "ef792896550d41d7ba4b37267e47d71a",
+     "run_after": "5faf9fd6a09b4adf8c2ad5639213011a"
+    },
+    {
+     "after_kst": "2026-09-20 15:36:00+09:00",
+     "before_kst": "2026-09-20 15:42:00+09:00",
+     "missing_min": 5,
+     "run_before": "5faf9fd6a09b4adf8c2ad5639213011a",
+     "run_after": "38ab540a22be4656835759c0d77c0571"
+    },
+    {
+     "after_kst": "2026-09-20 16:19:00+09:00",
+     "before_kst": "2026-09-20 16:25:00+09:00",
+     "missing_min": 5,
+     "run_before": "76882eaa15174665bfee36954bd63142",
+     "run_after": "34f09dec67c14c49aae5dc3ef50c1072"
+    },
+    {
+     "after_kst": "2026-09-20 17:46:00+09:00",
+     "before_kst": "2026-09-20 17:52:00+09:00",
+     "missing_min": 5,
+     "run_before": "7551cfafbd75425c8609d817ffe588ab",
+     "run_after": "2c34f5571dc447dea1885e513e035a0a"
+    },
+    {
+     "after_kst": "2026-09-20 17:52:00+09:00",
+     "before_kst": "2026-09-20 17:58:00+09:00",
+     "missing_min": 5,
+     "run_before": "2c34f5571dc447dea1885e513e035a0a",
+     "run_after": "c20856d82b704cedb36cb13f85277ca9"
+    },
+    {
+     "after_kst": "2026-09-20 18:37:00+09:00",
+     "before_kst": "2026-09-20 18:43:00+09:00",
+     "missing_min": 5,
+     "run_before": "803d3a66d94f42938c4ef1877093326f",
+     "run_after": "3387795b49794132b48a992e6fd8da77"
+    },
+    {
+     "after_kst": "2026-09-20 18:49:00+09:00",
+     "before_kst": "2026-09-20 18:55:00+09:00",
+     "missing_min": 5,
+     "run_before": "3387795b49794132b48a992e6fd8da77",
+     "run_after": "07e5387e2c954321b3d864d911c4de40"
+    },
+    {
+     "after_kst": "2026-09-20 19:31:00+09:00",
+     "before_kst": "2026-09-20 19:38:00+09:00",
+     "missing_min": 6,
+     "run_before": "d2938d0c5fdf4d9784f5bc9a1e1e747c",
+     "run_after": "68380d0f5e77462c96104342e6871f03"
+    },
+    {
+     "after_kst": "2026-09-20 19:47:00+09:00",
+     "before_kst": "2026-09-20 19:53:00+09:00",
+     "missing_min": 5,
+     "run_before": "68380d0f5e77462c96104342e6871f03",
+     "run_after": "e35dbdb773e14f4dac57c1d9a8d1b3f8"
+    },
+    {
+     "after_kst": "2026-09-20 20:04:00+09:00",
+     "before_kst": "2026-09-20 20:11:00+09:00",
+     "missing_min": 6,
+     "run_before": "e35dbdb773e14f4dac57c1d9a8d1b3f8",
+     "run_after": "a2f3d9e70f4841409d6273256a2c6eca"
+    },
+    {
+     "after_kst": "2026-09-20 20:39:00+09:00",
+     "before_kst": "2026-09-20 20:47:00+09:00",
+     "missing_min": 7,
+     "run_before": "c3e9fdfda42a4101a9edfc2a1e1af24c",
+     "run_after": "a4257fc2ee3945cdab3b4a7f0c4c49b2"
+    },
+    {
+     "after_kst": "2026-09-20 20:57:00+09:00",
+     "before_kst": "2026-09-20 21:05:00+09:00",
+     "missing_min": 7,
+     "run_before": "a4257fc2ee3945cdab3b4a7f0c4c49b2",
+     "run_after": "781e3b6180ff400abaf637c6aa62e911"
+    },
+    {
+     "after_kst": "2026-09-20 21:49:00+09:00",
+     "before_kst": "2026-09-20 21:55:00+09:00",
+     "missing_min": 5,
+     "run_before": "b2fa33b90fee4f81bdc8195d1417ef95",
+     "run_after": "6ba4c1c7dd0f41cdbdeff64b416b4a47"
+    },
+    {
+     "after_kst": "2026-09-20 22:07:00+09:00",
+     "before_kst": "2026-09-20 22:19:00+09:00",
+     "missing_min": 11,
+     "run_before": "1a5dbc2d04614cc98df6d08943cf4e91",
+     "run_after": "65016d5e755f4716816155c50c8e3f39"
+    },
+    {
+     "after_kst": "2026-09-20 22:25:00+09:00",
+     "before_kst": "2026-09-20 22:32:00+09:00",
+     "missing_min": 6,
+     "run_before": "65016d5e755f4716816155c50c8e3f39",
+     "run_after": "aba56c041be74756b29e132a7d8f2cf7"
+    },
+    {
+     "after_kst": "2026-09-20 23:03:00+09:00",
+     "before_kst": "2026-09-20 23:11:00+09:00",
+     "missing_min": 7,
+     "run_before": "b6b81d6b1b9b4cef8033378066fc8831",
+     "run_after": "4a318e6783274877be954bf2f6193458"
+    },
+    {
+     "after_kst": "2026-09-21 01:21:00+09:00",
+     "before_kst": "2026-09-21 01:27:00+09:00",
+     "missing_min": 5,
+     "run_before": "2d1a55c48a554e62829a18d3b3a69051",
+     "run_after": "4ceec7fb6fd84f9a927781d9fb352c8d"
+    },
+    {
+     "after_kst": "2026-09-21 02:50:00+09:00",
+     "before_kst": "2026-09-21 02:59:00+09:00",
+     "missing_min": 8,
+     "run_before": "7ef8786b6edf4d308fbab7f7537c451e",
+     "run_after": "f03d9f0c33bc41b99e7feba055a14d9b"
+    },
+    {
+     "after_kst": "2026-09-21 04:11:00+09:00",
+     "before_kst": "2026-09-21 04:18:00+09:00",
+     "missing_min": 6,
+     "run_before": "a110324095e4466f9140834f51ee088f",
+     "run_after": "43bec169b6fb4674a4f814d36cd69bd1"
+    },
+    {
+     "after_kst": "2026-09-21 04:30:00+09:00",
+     "before_kst": "2026-09-21 04:36:00+09:00",
+     "missing_min": 5,
+     "run_before": "3c8b44b477c4484bbfd04cf00758cec8",
+     "run_after": "76744e784e6049eeaf94ff7bfb278909"
+    },
+    {
+     "after_kst": "2026-09-21 05:11:00+09:00",
+     "before_kst": "2026-09-21 12:13:00+09:00",
+     "missing_min": 421,
+     "run_before": "d271ff5a411b4db78d382dbdc35a9ca6",
+     "run_after": "b205f31f6c0f41d9ae85838c1fc62a61"
+    },
+    {
+     "after_kst": "2026-09-21 12:18:00+09:00",
+     "before_kst": "2026-09-21 12:24:00+09:00",
+     "missing_min": 5,
+     "run_before": "d0d91fbe6e104bd882211b33d85bc91b",
+     "run_after": "9fca6c10ecb64889ba5ec68013376d5e"
+    },
+    {
+     "after_kst": "2026-09-21 12:37:00+09:00",
+     "before_kst": "2026-09-22 12:01:00+09:00",
+     "missing_min": 1403,
+     "run_before": "9fca6c10ecb64889ba5ec68013376d5e",
+     "run_after": "7ced6820a289486fbfdd08a46298f889"
+    },
+    {
+     "after_kst": "2026-09-23 02:07:00+09:00",
+     "before_kst": "2026-09-23 15:42:00+09:00",
+     "missing_min": 814,
+     "run_before": "5333314d4bbb4f49b8486a816b745852",
+     "run_after": "68df49037aad4fb5b21bdf1e92406986"
+    },
+    {
+     "after_kst": "2026-09-23 19:21:00+09:00",
+     "before_kst": "2026-09-25 14:17:00+09:00",
+     "missing_min": 2575,
+     "run_before": "153f5e15c1fb4380b94ee4949c28b784",
+     "run_after": "6850f01d8e9e48628ab9fdb70103f0f2"
+    },
+    {
+     "after_kst": "2026-09-27 16:41:00+09:00",
+     "before_kst": "2026-09-28 00:18:00+09:00",
+     "missing_min": 456,
+     "run_before": "1e53d6b39cc24ed1aae65cecb24b6644",
+     "run_after": "63ffc676da1c40cd8edd7c0d693ece3f"
+    },
+    {
+     "after_kst": "2026-09-28 02:44:00+09:00",
+     "before_kst": "2026-09-29 15:10:00+09:00",
+     "missing_min": 2185,
+     "run_before": "deb1f612dafb4fa19704475f907228db",
+     "run_after": "a8c6da4839414657a0700bb40d66205d"
+    },
+    {
+     "after_kst": "2026-09-30 07:44:00+09:00",
+     "before_kst": "2026-09-30 09:34:00+09:00",
+     "missing_min": 109,
+     "run_before": "92e44bb8aa81434c8dca1bacc280d1d2",
+     "run_after": "67c590fbbe0f4f9db42725bb89fd424b"
+    },
+    {
+     "after_kst": "2026-10-01 14:19:00+09:00",
+     "before_kst": "2026-10-01 15:35:00+09:00",
+     "missing_min": 75,
+     "run_before": "67c590fbbe0f4f9db42725bb89fd424b",
+     "run_after": "a559080bc9694e559a789784f9af7dc1"
+    },
+    {
+     "after_kst": "2026-10-01 19:20:00+09:00",
+     "before_kst": "2026-10-01 19:26:00+09:00",
+     "missing_min": 5,
+     "run_before": "512e19896a3f49968c9decb8fdb53922",
+     "run_after": "cad62374c7ba437a8330e37ee9ccb27d"
+    }
+   ]
+  },
+  "SKHYUSDT": {
+   "bars": 8820,
+   "first_kst": "2026-09-18 19:28:00+09:00",
+   "last_kst": "2026-10-01 19:46:00+09:00",
+   "backfill_share": 0.0243,
+   "zero_trade_bars": 167,
+   "collector_runs": 238,
+   "block_coverage": [
+    {
+     "block": "2026-09-18",
+     "bars": 336,
+     "coverage": 0.233
+    },
+    {
+     "block": "2026-09-19",
+     "bars": 528,
+     "coverage": 0.367
+    },
+    {
+     "block": "2026-09-20",
+     "bars": 775,
+     "coverage": 0.538
+    },
+    {
+     "block": "2026-09-21",
+     "bars": 17,
+     "coverage": 0.012
+    },
+    {
+     "block": "2026-09-22",
+     "bars": 845,
+     "coverage": 0.587
+    },
+    {
+     "block": "2026-09-23",
+     "bars": 213,
+     "coverage": 0.148
+    },
+    {
+     "block": "2026-09-25",
+     "bars": 1059,
+     "coverage": 0.735
+    },
+    {
+     "block": "2026-09-26",
+     "bars": 1433,
+     "coverage": 0.995
+    },
+    {
+     "block": "2026-09-27",
+     "bars": 658,
+     "coverage": 0.457
+    },
+    {
+     "block": "2026-09-29",
+     "bars": 994,
+     "coverage": 0.69
+    },
+    {
+     "block": "2026-09-30",
+     "bars": 1346,
+     "coverage": 0.935
+    },
+    {
+     "block": "2026-10-01",
+     "bars": 616,
+     "coverage": 0.428
+    }
+   ],
+   "bars_by_kst_hour_avg_per_block": {
+    "0": 38.6,
+    "1": 40.8,
+    "2": 31.4,
+    "3": 27.8,
+    "4": 27.2,
+    "5": 25.1,
+    "6": 24.0,
+    "7": 23.0,
+    "8": 18.4,
+    "9": 21.2,
+    "10": 22.0,
+    "11": 21.4,
+    "12": 29.0,
+    "13": 27.6,
+    "14": 27.3,
+    "15": 34.8,
+    "16": 41.2,
+    "17": 38.1,
+    "18": 37.9,
+    "19": 35.7,
+    "20": 33.2,
+    "21": 36.6,
+    "22": 36.9,
+    "23": 35.8
+   },
+   "gaps_over_5min": [
+    {
+     "after_kst": "2026-09-18 23:20:00+09:00",
+     "before_kst": "2026-09-18 23:30:00+09:00",
+     "missing_min": 9,
+     "run_before": "27435de06cf1473ab68737a100e7cb1d",
+     "run_after": "436c7d32d15949b0b92c04e51b5171dc"
+    },
+    {
+     "after_kst": "2026-09-19 00:09:00+09:00",
+     "before_kst": "2026-09-19 00:16:00+09:00",
+     "missing_min": 6,
+     "run_before": "825e23f48cdd4aa49b12a3e1e7744d61",
+     "run_after": "db17c7c1aac14e46b125010d6594a692"
+    },
+    {
+     "after_kst": "2026-09-19 00:25:00+09:00",
+     "before_kst": "2026-09-19 00:35:00+09:00",
+     "missing_min": 9,
+     "run_before": "db17c7c1aac14e46b125010d6594a692",
+     "run_after": "fd20a4f53cef4c5782ca8491e01cde60"
+    },
+    {
+     "after_kst": "2026-09-19 00:44:00+09:00",
+     "before_kst": "2026-09-19 00:50:00+09:00",
+     "missing_min": 5,
+     "run_before": "fd20a4f53cef4c5782ca8491e01cde60",
+     "run_after": "1bf0a81b6b604c1f85e922586368f32f"
+    },
+    {
+     "after_kst": "2026-09-19 01:57:00+09:00",
+     "before_kst": "2026-09-19 21:10:00+09:00",
+     "missing_min": 1152,
+     "run_before": "357ec43914504073909599799704b173",
+     "run_after": "a947b50e784a4066903599ac3548b4a8"
+    },
+    {
+     "after_kst": "2026-09-19 21:14:00+09:00",
+     "before_kst": "2026-09-19 21:20:00+09:00",
+     "missing_min": 5,
+     "run_before": "a947b50e784a4066903599ac3548b4a8",
+     "run_after": "cda07223c3744be0a350895cb9182763"
+    },
+    {
+     "after_kst": "2026-09-19 23:51:00+09:00",
+     "before_kst": "2026-09-19 23:58:00+09:00",
+     "missing_min": 6,
+     "run_before": "84526ac4662048e18634e8d0fd7d4a1d",
+     "run_after": "93b6c49a50de4f58b370b9471b56d1d2"
+    },
+    {
+     "after_kst": "2026-09-20 00:13:00+09:00",
+     "before_kst": "2026-09-20 00:22:00+09:00",
+     "missing_min": 8,
+     "run_before": "8f94378473274ab9b398a93750771c38",
+     "run_after": "3942fa6392fc4cb5a63d3d43b4d28916"
+    },
+    {
+     "after_kst": "2026-09-20 02:06:00+09:00",
+     "before_kst": "2026-09-20 02:14:00+09:00",
+     "missing_min": 7,
+     "run_before": "85e2cc6169d54664babbd410819757b3",
+     "run_after": "7a877cd65d9c43a4aaa7e53f12df1818"
+    },
+    {
+     "after_kst": "2026-09-20 06:35:00+09:00",
+     "before_kst": "2026-09-20 06:42:00+09:00",
+     "missing_min": 6,
+     "run_before": "0ae31bcd37ca4ea091768dd62fa801ec",
+     "run_after": "56efecf732b240a78bd49d29f1202234"
+    },
+    {
+     "after_kst": "2026-09-20 08:30:00+09:00",
+     "before_kst": "2026-09-20 08:36:00+09:00",
+     "missing_min": 5,
+     "run_before": "e44b33f7d5914be69651991d4055fb8c",
+     "run_after": "1fc3fdaa17994503ac2e417ed40b4ee2"
+    },
+    {
+     "after_kst": "2026-09-20 08:45:00+09:00",
+     "before_kst": "2026-09-20 08:55:00+09:00",
+     "missing_min": 9,
+     "run_before": "1fc3fdaa17994503ac2e417ed40b4ee2",
+     "run_after": "3b44ea87a1814a3490d330bcf792ffd7"
+    },
+    {
+     "after_kst": "2026-09-20 09:53:00+09:00",
+     "before_kst": "2026-09-20 10:32:00+09:00",
+     "missing_min": 38,
+     "run_before": "a0387dc2e1054db8b875e12d039ccec7",
+     "run_after": "1e8263ac00d842deb1dcc28df2b4d7f1"
+    },
+    {
+     "after_kst": "2026-09-20 11:00:00+09:00",
+     "before_kst": "2026-09-20 11:25:00+09:00",
+     "missing_min": 24,
+     "run_before": "5ad9898757ad4d82b303af8932fee3d1",
+     "run_after": "73bf8c76f414430fa84abf40fd3285db"
+    },
+    {
+     "after_kst": "2026-09-20 11:51:00+09:00",
+     "before_kst": "2026-09-20 11:57:00+09:00",
+     "missing_min": 5,
+     "run_before": "9deaf147e5ed46d2bb2ce37f40f3f682",
+     "run_after": "87cf198fdead45769a353bdccbec3bd0"
+    },
+    {
+     "after_kst": "2026-09-20 13:13:00+09:00",
+     "before_kst": "2026-09-20 13:19:00+09:00",
+     "missing_min": 5,
+     "run_before": "5d95e5c84dd442118245c9f74e59a9e4",
+     "run_after": "9d309850e5204eb6ad34b1a5d22fe98b"
+    },
+    {
+     "after_kst": "2026-09-20 13:21:00+09:00",
+     "before_kst": "2026-09-20 13:28:00+09:00",
+     "missing_min": 6,
+     "run_before": "9d309850e5204eb6ad34b1a5d22fe98b",
+     "run_after": "f083f1717164408a88438ed76860c92d"
+    },
+    {
+     "after_kst": "2026-09-20 13:29:00+09:00",
+     "before_kst": "2026-09-20 13:37:00+09:00",
+     "missing_min": 7,
+     "run_before": "f083f1717164408a88438ed76860c92d",
+     "run_after": "5d911e382a8a4473bede71823f0bd73f"
+    },
+    {
+     "after_kst": "2026-09-20 13:39:00+09:00",
+     "before_kst": "2026-09-20 13:45:00+09:00",
+     "missing_min": 5,
+     "run_before": "5d911e382a8a4473bede71823f0bd73f",
+     "run_after": "8ed41211e9d94604b4ce316142219ce2"
+    },
+    {
+     "after_kst": "2026-09-20 14:11:00+09:00",
+     "before_kst": "2026-09-20 14:19:00+09:00",
+     "missing_min": 7,
+     "run_before": "ae6bda1ae3a049a089ba9ea7f02ae5ae",
+     "run_after": "c007cfe4f21d4263b5c8cc7cde816189"
+    },
+    {
+     "after_kst": "2026-09-20 14:26:00+09:00",
+     "before_kst": "2026-09-20 14:36:00+09:00",
+     "missing_min": 9,
+     "run_before": "4e7003589c614f6d8164bb4716473cef",
+     "run_after": "c0ff212583d741e89bd91fd45af769fb"
+    },
+    {
+     "after_kst": "2026-09-20 14:42:00+09:00",
+     "before_kst": "2026-09-20 14:51:00+09:00",
+     "missing_min": 8,
+     "run_before": "8dc379e7d7114661b6beff2a3a687da4",
+     "run_after": "d300821492b249f5a916c7b84b5cde3a"
+    },
+    {
+     "after_kst": "2026-09-20 15:13:00+09:00",
+     "before_kst": "2026-09-20 15:20:00+09:00",
+     "missing_min": 6,
+     "run_before": "8b26284629344fec9a371928bfd1c646",
+     "run_after": "ef792896550d41d7ba4b37267e47d71a"
+    },
+    {
+     "after_kst": "2026-09-20 15:26:00+09:00",
+     "before_kst": "2026-09-20 15:35:00+09:00",
+     "missing_min": 8,
+     "run_before": "ef792896550d41d7ba4b37267e47d71a",
+     "run_after": "5faf9fd6a09b4adf8c2ad5639213011a"
+    },
+    {
+     "after_kst": "2026-09-20 15:36:00+09:00",
+     "before_kst": "2026-09-20 15:42:00+09:00",
+     "missing_min": 5,
+     "run_before": "5faf9fd6a09b4adf8c2ad5639213011a",
+     "run_after": "38ab540a22be4656835759c0d77c0571"
+    },
+    {
+     "after_kst": "2026-09-20 16:19:00+09:00",
+     "before_kst": "2026-09-20 16:25:00+09:00",
+     "missing_min": 5,
+     "run_before": "76882eaa15174665bfee36954bd63142",
+     "run_after": "34f09dec67c14c49aae5dc3ef50c1072"
+    },
+    {
+     "after_kst": "2026-09-20 17:46:00+09:00",
+     "before_kst": "2026-09-20 17:52:00+09:00",
+     "missing_min": 5,
+     "run_before": "7551cfafbd75425c8609d817ffe588ab",
+     "run_after": "2c34f5571dc447dea1885e513e035a0a"
+    },
+    {
+     "after_kst": "2026-09-20 17:52:00+09:00",
+     "before_kst": "2026-09-20 17:58:00+09:00",
+     "missing_min": 5,
+     "run_before": "2c34f5571dc447dea1885e513e035a0a",
+     "run_after": "c20856d82b704cedb36cb13f85277ca9"
+    },
+    {
+     "after_kst": "2026-09-20 18:37:00+09:00",
+     "before_kst": "2026-09-20 18:43:00+09:00",
+     "missing_min": 5,
+     "run_before": "803d3a66d94f42938c4ef1877093326f",
+     "run_after": "3387795b49794132b48a992e6fd8da77"
+    },
+    {
+     "after_kst": "2026-09-20 18:48:00+09:00",
+     "before_kst": "2026-09-20 18:55:00+09:00",
+     "missing_min": 6,
+     "run_before": "3387795b49794132b48a992e6fd8da77",
+     "run_after": "07e5387e2c954321b3d864d911c4de40"
+    },
+    {
+     "after_kst": "2026-09-20 19:31:00+09:00",
+     "before_kst": "2026-09-20 19:38:00+09:00",
+     "missing_min": 6,
+     "run_before": "d2938d0c5fdf4d9784f5bc9a1e1e747c",
+     "run_after": "68380d0f5e77462c96104342e6871f03"
+    },
+    {
+     "after_kst": "2026-09-20 19:47:00+09:00",
+     "before_kst": "2026-09-20 19:53:00+09:00",
+     "missing_min": 5,
+     "run_before": "68380d0f5e77462c96104342e6871f03",
+     "run_after": "e35dbdb773e14f4dac57c1d9a8d1b3f8"
+    },
+    {
+     "after_kst": "2026-09-20 20:04:00+09:00",
+     "before_kst": "2026-09-20 20:11:00+09:00",
+     "missing_min": 6,
+     "run_before": "e35dbdb773e14f4dac57c1d9a8d1b3f8",
+     "run_after": "a2f3d9e70f4841409d6273256a2c6eca"
+    },
+    {
+     "after_kst": "2026-09-20 20:39:00+09:00",
+     "before_kst": "2026-09-20 20:47:00+09:00",
+     "missing_min": 7,
+     "run_before": "c3e9fdfda42a4101a9edfc2a1e1af24c",
+     "run_after": "a4257fc2ee3945cdab3b4a7f0c4c49b2"
+    },
+    {
+     "after_kst": "2026-09-20 20:57:00+09:00",
+     "before_kst": "2026-09-20 21:05:00+09:00",
+     "missing_min": 7,
+     "run_before": "a4257fc2ee3945cdab3b4a7f0c4c49b2",
+     "run_after": "781e3b6180ff400abaf637c6aa62e911"
+    },
+    {
+     "after_kst": "2026-09-20 21:49:00+09:00",
+     "before_kst": "2026-09-20 21:55:00+09:00",
+     "missing_min": 5,
+     "run_before": "b2fa33b90fee4f81bdc8195d1417ef95",
+     "run_after": "6ba4c1c7dd0f41cdbdeff64b416b4a47"
+    },
+    {
+     "after_kst": "2026-09-20 22:05:00+09:00",
+     "before_kst": "2026-09-20 22:19:00+09:00",
+     "missing_min": 13,
+     "run_before": "6ba4c1c7dd0f41cdbdeff64b416b4a47",
+     "run_after": "65016d5e755f4716816155c50c8e3f39"
+    },
+    {
+     "after_kst": "2026-09-20 22:25:00+09:00",
+     "before_kst": "2026-09-20 22:32:00+09:00",
+     "missing_min": 6,
+     "run_before": "65016d5e755f4716816155c50c8e3f39",
+     "run_after": "aba56c041be74756b29e132a7d8f2cf7"
+    },
+    {
+     "after_kst": "2026-09-20 23:03:00+09:00",
+     "before_kst": "2026-09-20 23:11:00+09:00",
+     "missing_min": 7,
+     "run_before": "b6b81d6b1b9b4cef8033378066fc8831",
+     "run_after": "4a318e6783274877be954bf2f6193458"
+    },
+    {
+     "after_kst": "2026-09-20 23:40:00+09:00",
+     "before_kst": "2026-09-20 23:46:00+09:00",
+     "missing_min": 5,
+     "run_before": "4a510d1631b743409a06858661a8c975",
+     "run_after": "fd3052d00e6d4e11b6788d75545186f5"
+    },
+    {
+     "after_kst": "2026-09-21 00:37:00+09:00",
+     "before_kst": "2026-09-21 00:43:00+09:00",
+     "missing_min": 5,
+     "run_before": "d15008a0b35646869e97649b06df3d90",
+     "run_after": "593ffe06703f40a7a4f709075a2ff85e"
+    },
+    {
+     "after_kst": "2026-09-21 01:21:00+09:00",
+     "before_kst": "2026-09-21 01:27:00+09:00",
+     "missing_min": 5,
+     "run_before": "2d1a55c48a554e62829a18d3b3a69051",
+     "run_after": "4ceec7fb6fd84f9a927781d9fb352c8d"
+    },
+    {
+     "after_kst": "2026-09-21 02:50:00+09:00",
+     "before_kst": "2026-09-21 02:59:00+09:00",
+     "missing_min": 8,
+     "run_before": "7ef8786b6edf4d308fbab7f7537c451e",
+     "run_after": "f03d9f0c33bc41b99e7feba055a14d9b"
+    },
+    {
+     "after_kst": "2026-09-21 03:10:00+09:00",
+     "before_kst": "2026-09-21 03:16:00+09:00",
+     "missing_min": 5,
+     "run_before": "2dee8b73f97b409980838a31b761f4a9",
+     "run_after": "ff6d25bbb9a245e5af0457e01831dd43"
+    },
+    {
+     "after_kst": "2026-09-21 04:11:00+09:00",
+     "before_kst": "2026-09-21 04:18:00+09:00",
+     "missing_min": 6,
+     "run_before": "a110324095e4466f9140834f51ee088f",
+     "run_after": "43bec169b6fb4674a4f814d36cd69bd1"
+    },
+    {
+     "after_kst": "2026-09-21 04:30:00+09:00",
+     "before_kst": "2026-09-21 04:36:00+09:00",
+     "missing_min": 5,
+     "run_before": "3c8b44b477c4484bbfd04cf00758cec8",
+     "run_after": "76744e784e6049eeaf94ff7bfb278909"
+    },
+    {
+     "after_kst": "2026-09-21 05:11:00+09:00",
+     "before_kst": "2026-09-21 12:13:00+09:00",
+     "missing_min": 421,
+     "run_before": "d271ff5a411b4db78d382dbdc35a9ca6",
+     "run_after": "b205f31f6c0f41d9ae85838c1fc62a61"
+    },
+    {
+     "after_kst": "2026-09-21 12:18:00+09:00",
+     "before_kst": "2026-09-21 12:24:00+09:00",
+     "missing_min": 5,
+     "run_before": "d0d91fbe6e104bd882211b33d85bc91b",
+     "run_after": "9fca6c10ecb64889ba5ec68013376d5e"
+    },
+    {
+     "after_kst": "2026-09-21 12:37:00+09:00",
+     "before_kst": "2026-09-22 12:01:00+09:00",
+     "missing_min": 1403,
+     "run_before": "9fca6c10ecb64889ba5ec68013376d5e",
+     "run_after": "7ced6820a289486fbfdd08a46298f889"
+    },
+    {
+     "after_kst": "2026-09-23 02:07:00+09:00",
+     "before_kst": "2026-09-23 15:42:00+09:00",
+     "missing_min": 814,
+     "run_before": "5333314d4bbb4f49b8486a816b745852",
+     "run_after": "68df49037aad4fb5b21bdf1e92406986"
+    },
+    {
+     "after_kst": "2026-09-23 19:21:00+09:00",
+     "before_kst": "2026-09-25 14:17:00+09:00",
+     "missing_min": 2575,
+     "run_before": "153f5e15c1fb4380b94ee4949c28b784",
+     "run_after": "6850f01d8e9e48628ab9fdb70103f0f2"
+    },
+    {
+     "after_kst": "2026-09-27 16:41:00+09:00",
+     "before_kst": "2026-09-28 00:18:00+09:00",
+     "missing_min": 456,
+     "run_before": "1e53d6b39cc24ed1aae65cecb24b6644",
+     "run_after": "63ffc676da1c40cd8edd7c0d693ece3f"
+    },
+    {
+     "after_kst": "2026-09-28 02:44:00+09:00",
+     "before_kst": "2026-09-29 15:10:00+09:00",
+     "missing_min": 2185,
+     "run_before": "deb1f612dafb4fa19704475f907228db",
+     "run_after": "a8c6da4839414657a0700bb40d66205d"
+    },
+    {
+     "after_kst": "2026-09-30 07:44:00+09:00",
+     "before_kst": "2026-09-30 09:34:00+09:00",
+     "missing_min": 109,
+     "run_before": "92e44bb8aa81434c8dca1bacc280d1d2",
+     "run_after": "67c590fbbe0f4f9db42725bb89fd424b"
+    },
+    {
+     "after_kst": "2026-10-01 14:19:00+09:00",
+     "before_kst": "2026-10-01 15:35:00+09:00",
+     "missing_min": 75,
+     "run_before": "67c590fbbe0f4f9db42725bb89fd424b",
+     "run_after": "a559080bc9694e559a789784f9af7dc1"
+    },
+    {
+     "after_kst": "2026-10-01 19:20:00+09:00",
+     "before_kst": "2026-10-01 19:26:00+09:00",
+     "missing_min": 5,
+     "run_before": "512e19896a3f49968c9decb8fdb53922",
+     "run_after": "cad62374c7ba437a8330e37ee9ccb27d"
+    }
+   ]
+  }
+ },
+ "files": [
+  "SKHYNIXUSDT_2026-09-15.parquet",
+  "SKHYNIXUSDT_2026-09-18.parquet",
+  "SKHYNIXUSDT_2026-09-19.parquet",
+  "SKHYNIXUSDT_2026-09-20.parquet",
+  "SKHYNIXUSDT_2026-09-21.parquet",
+  "SKHYNIXUSDT_2026-09-22.parquet",
+  "SKHYNIXUSDT_2026-09-23.parquet",
+  "SKHYNIXUSDT_2026-09-25.parquet",
+  "SKHYNIXUSDT_2026-09-26.parquet",
+  "SKHYNIXUSDT_2026-09-27.parquet",
+  "SKHYNIXUSDT_2026-09-28.parquet",
+  "SKHYNIXUSDT_2026-09-29.parquet",
+  "SKHYNIXUSDT_2026-09-30.parquet",
+  "SKHYNIXUSDT_2026-10-01.parquet",
+  "SKHYUSDT_2026-09-18.parquet",
+  "SKHYUSDT_2026-09-19.parquet",
+  "SKHYUSDT_2026-09-20.parquet",
+  "SKHYUSDT_2026-09-21.parquet",
+  "SKHYUSDT_2026-09-22.parquet",
+  "SKHYUSDT_2026-09-23.parquet",
+  "SKHYUSDT_2026-09-25.parquet",
+  "SKHYUSDT_2026-09-26.parquet",
+  "SKHYUSDT_2026-09-27.parquet",
+  "SKHYUSDT_2026-09-28.parquet",
+  "SKHYUSDT_2026-09-29.parquet",
+  "SKHYUSDT_2026-09-30.parquet",
+  "SKHYUSDT_2026-10-01.parquet"
+ ],
+ "missing_symbols": []
+}
