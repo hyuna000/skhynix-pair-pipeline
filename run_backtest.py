@@ -255,12 +255,7 @@ def main(argv=None):
         hypo_trades=("hypo_n_trades", "sum"), hypo_net_pnl=("hypo_net_pnl", "sum"),
         hypo_net_fee_alt=("hypo_net_pnl_fee_alt", "sum")).reset_index()
     summ.to_csv(os.path.join(report_dir, f"backtest_summary_{run_id}.csv"), index=False, encoding="utf-8-sig")
-    ev = cfg.get("evaluation", {})
-    n_days = int(gate["trading_date"].nunique())
-    need = int(ev.get("min_trading_days", 0))
     print(f"run_id={run_id}  (정산 정책: {cfg['funding'].get('policy', 'exit')}, 대체 수수료 {cfg['costs'].get('fee_alt')})")
-    if need:
-        print(f"평가 가능 여부: 거래일 {n_days} / 최소 {need} -> {'평가 가능' if n_days >= need else '데이터 부족 (11절 평가 보류)'}")
     print(summ.round(2).to_string(index=False))
     print(f"감사: {json.dumps({k: v for k, v in aud.items() if k != 'settlement_schedule'}, ensure_ascii=False, default=str)}")
     if not aud["aggregate_ok"] or not aud["funding_ok"]:
