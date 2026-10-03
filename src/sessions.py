@@ -85,3 +85,36 @@ def holding_segments(sessions: list[Session]) -> list[int]:
     if start is not None:
         segs.append(int((sessions[-1].end - start) / pd.Timedelta(minutes=1)) + 1)
     return segs
+
+
+def segment_layout(sessions: list[Session], sched) -> list[dict]:
+    """임계값 최적화용 구간 배치. holding_segments 와 같은 구간마다
+    L(분), act(주문 가능 분), entry_ok(진입 가능 분 = 세션 마지막 분 제외), settle[(분 위치, 심볼)]."""
+    import numpy as np
+    one = pd.Timedelta(minutes=1)
+    groups, cur = [], []
+    for ss in sessions:
+        cur.append(ss)
+        if ss.end_reason != "HOLD":
+            groups.append(cur)
+            cur = []
+    if cur:
+        groups.append(cur)
+    out = []
+    for g in groups:
+        start, end = g[0].start, g[-1].end
+        L = int((end - start) / one) + 1
+        act = np.zeros(L, bool)
+        entry_ok = np.zeros(L, bool)
+        for ss in g:
+            i0, i1 = int((ss.start - start) / one), int((ss.end - start) / one)
+            act[i0:i1 + 1] = True
+            entry_ok[i0:i1] = True          # 세션 마지막 분은 진입 없음
+        settle = []
+        if sched is not None:
+            for st, sym in sched.settlements(start, end + one):
+                t = int((st.tz_convert(start.tz).floor("min") - start) / one)
+                if 0 <= t < L:
+                    settle.append((t, sym))
+        out.append({"L": L, "act": act, "entry_ok": entry_ok, "settle": settle})
+    return out

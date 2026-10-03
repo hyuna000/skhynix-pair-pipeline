@@ -150,3 +150,27 @@ def test_holding_segments():
     assert holding_segments(sess) == [401]
     sess2 = [Session(0, m(0), m(58), "FORCED_FUNDING"), Session(1, m(61), m(400), "FORCED_0759")]
     assert holding_segments(sess2) == [59, 340]
+
+
+def test_engine_matches_vectorized_rules_with_hold_layout():
+    from src.sessions import segment_layout
+    cfg = _cfg()
+    rng = np.random.default_rng(7)
+    tz = "Asia/Seoul"
+    for trial in range(5):
+        z = thresholds.simulate_paths(rng, 1, 400, np.exp(-np.log(2) / 30), 0.9)[0]
+        md, idx = _market_from_z(z)
+        sess = [Session(0, idx[0].tz_convert(tz), idx[120].tz_convert(tz), "HOLD"),
+                Session(1, idx[123].tz_convert(tz), idx[250].tz_convert(tz), "HOLD"),
+                Session(2, idx[253].tz_convert(tz), idx[-2].tz_convert(tz), "FORCED_0759")]
+        lay = segment_layout(sess, None)[0]
+        e, x, s = 1.25, 0.0, 3.0
+        thr = {"entry_z": e, "exit_z": x, "stop_z": s}
+        params = {"a": -2.28, "b": 1.0, "mu": 0.0, "sigma": 0.003}
+        res = engine.run_day(cfg, md, sess, params, thr, "struct", NoFunding(), list(idx[:-1]), "2026-09-30")
+        pnl_v, ntr_v = thresholds.rules_vectorized(z[None, :-1], e, x, s, 0, 0, 0, True,
+                                                   lay["act"], lay["entry_ok"])
+        tr = res["trades"]
+        assert len(tr) == int(ntr_v[0])
+        zsum = sum((1 if t["direction"] == "LONG_SPREAD" else -1) * (t["exit_z"] - t["entry_z"]) for t in tr)
+        assert np.isclose(zsum, pnl_v[0])

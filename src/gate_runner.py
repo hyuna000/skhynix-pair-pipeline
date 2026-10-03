@@ -109,6 +109,7 @@ def slice_window(px: pd.DataFrame, win: Window, cfg: dict | None = None) -> dict
         "late_receive_bars": int(len(late)),
         "late_receive_max_sec": float((late.max() - t0_ns) / 1e9) if len(late) else 0.0,
         "last_bar_open_utc": str(paired.index.max()) if len(paired) else "",
+        "idx_used": paired.index,          # 매매 단계(ESTAR 적합)에서 연속 구간을 다시 나눌 때 사용
     }
 
 

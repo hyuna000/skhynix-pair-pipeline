@@ -34,7 +34,9 @@ import pandas as pd
 from src import config, engine, ingest, logger, thresholds
 from src.funding import FundingSchedule, load_funding
 from src.gate_runner import date_range
-from src.sessions import build_sessions, holding_segments, trading_day_bounds
+from src.sessions import build_sessions, holding_segments, segment_layout, trading_day_bounds
+from src import estar
+from src.gate_runner import slice_window
 from src.tradecal import TradingCalendar
 
 KST = "Asia/Seoul"
@@ -63,16 +65,85 @@ def job_seed(cfg, d: str, cand: str) -> int:
     return int(cfg["thresholds"]["seed"]) + int(d.replace("-", "")) + zlib.crc32(cand.encode()) % 1000
 
 
+def model_for_rule(cfg, rule: str) -> str:
+    """KSS 버전은 config 의 비선형 임계값 방식, 나머지는 선형."""
+    if rule == "kss" and cfg["trading"].get("nonlinear_thresholds", "linear") == "estar":
+        return "estar"
+    return "block_bootstrap" if cfg["thresholds"].get("linear_path_method", "parametric") == "block_bootstrap" else "linear"
+
+
+def day_z_stats(cal, px, r) -> dict:
+    """거래일 [T0, 07:59] 의 z 를 윈도우 모수로 계산한 평균·표준편차 (표본 밖 수준 이동 측정용)."""
+    t0, last = trading_day_bounds(cal, date.fromisoformat(r["trading_date"]))
+    w = px.loc[(px.index >= t0.tz_convert("UTC")) & (px.index <= last.tz_convert("UTC")), ["L", "A"]].dropna()
+    if len(w) < 60:
+        return {"n": len(w), "mean": np.nan, "std": np.nan}
+    bb = 1.0 if r["candidate"] == "struct" else r["b"]
+    z = ((np.log(w["A"]) - bb * np.log(w["L"]) - r["a"]) - r["mu"]) / r["sigma"]
+    return {"n": len(w), "mean": float(z.mean()), "std": float(z.std())}
+
+
+def level_sd_for(cfg, day_stats: dict, d: str, cand: str) -> tuple[float, int]:
+    """T0 이전 거래일들(같은 후보)의 그날 z 평균 RMS. 거래일 d-1 은 d 의 T0 직전에 끝나므로 룩어헤드 없음."""
+    tc = cfg["thresholds"]
+    if not tc.get("level_shift", False):
+        return 0.0, 0
+    past = sorted((dd, v["mean"]) for (dd, c), v in day_stats.items() if c == cand and dd < d and np.isfinite(v["mean"]))
+    past = past[-int(tc.get("level_shift_lookback_days", 10)):]
+    if len(past) < int(tc.get("level_shift_min_obs", 3)):
+        return float(tc.get("level_shift_sd_default", 1.0)), len(past)
+    m = np.array([v for _, v in past])
+    return float(np.sqrt(np.mean(m * m))), len(past)
+
+
 def run_one(job):
     cfg, d, cand, params, sessions, md, sched, day_minutes = (
         job["cfg"], job["date"], job["cand"], job["params"], job["sessions"], job["md"], job["sched"], job["minutes"])
+    model = job["model"]
     seed = job_seed(cfg, d, cand)
-    thr = thresholds.optimize(cfg, params, params["b"], cand, holding_segments(sessions), md.symbols, seed)
+    fc = cfg["funding"]
+    rate_fc = sched.forecast(job["t0"], int(fc.get("forecast_lookback", 6)), fc.get("forecast_method", "signed")) \
+        if fc.get("include_in_thresholds", False) else None
+    layout = segment_layout(sessions, sched)
+    est = {"estar_phi": np.nan, "estar_gamma": np.nan, "estar_lags": -1, "estar_speed_at_2": np.nan, "estar_reason": "",
+           "estar_delta": np.nan}
+    thr = None
+    lsd = job.get("level_sd", 0.0)
+    zs = None
+    if "window" in job:
+        w = job["window"]
+        zs = estar.window_z(w["lnA"], w["lnL"], w["idx"], params["a"], params["b"], params["mu"], params["sigma"],
+                            cand == "struct", int(cfg["data_quality"].get("max_gap_min", 5)))
+    if model == "estar":
+        fit = estar.fit(zs, int(cfg["thresholds"].get("estar_max_lags", 10)))
+        est.update({"estar_phi": fit.get("phi", np.nan), "estar_gamma": fit.get("gamma", np.nan),
+                    "estar_lags": fit.get("p", -1), "estar_speed_at_2": fit.get("speed_at_2", np.nan),
+                    "estar_reason": fit.get("reason", ""), "estar_delta": fit.get("delta", np.nan)})
+        if fit["ok"]:
+            thr = thresholds.optimize(cfg, params, params["b"], cand, layout, md.symbols, seed,
+                                      model="estar", estar_model=fit, rate_fc=rate_fc, level_sd=lsd)
+            if not thr["ok"]:
+                est["estar_reason"] = thr["reason"]
+                thr = None
+        if thr is None:
+            fb = "block_bootstrap" if zs else "linear"
+            thr = thresholds.optimize(cfg, params, params["b"], cand, layout, md.symbols, seed, model=fb,
+                                      rate_fc=rate_fc, z_segs=zs, level_sd=lsd)
+            if thr["ok"]:
+                thr["model"] = f"{fb}_fallback"
+    else:
+        thr = thresholds.optimize(cfg, params, params["b"], cand, layout, md.symbols, seed, model=model,
+                                  rate_fc=rate_fc, z_segs=zs, level_sd=lsd)
+    thr.update(est)
     thr["seed"] = seed
+    thr["rate_fc"] = rate_fc or {}
+    thr["level_sd_obs"] = job.get("level_sd_obs", 0)
+    out = {"date": d, "cand": cand, "model": model, "thr": thr}
     if not thr["ok"]:
-        return {"date": d, "cand": cand, "thr": thr, "res": {"trades": [], "signals": [], "funding": []}}
-    res = engine.run_day(cfg, md, sessions, params, thr, cand, sched, day_minutes, d)
-    return {"date": d, "cand": cand, "thr": thr, "res": res}
+        out["res"] = {"trades": [], "signals": [], "funding": []}
+        return out
+    out["res"] = engine.run_day(cfg, md, sessions, params, thr, cand, sched, day_minutes, d)
+    return out
 
 
 def main(argv=None):
@@ -113,8 +184,12 @@ def main(argv=None):
 
     usable = gate[gate["stats_computed"] & gate["a"].notna() & gate["sigma"].notna()]
     usable = usable[(usable["b"] > 0) | (usable["candidate"] == "struct")]
-    keys = usable.drop_duplicates(["trading_date", "candidate"])
+    usable = usable.assign(model=[model_for_rule(cfg, r) for r in usable["gate_rule"]])
+    keys = usable.drop_duplicates(["trading_date", "candidate", "model"])
+    day_stats = {(r["trading_date"], r["candidate"]): day_z_stats(cal, px, r)
+                 for _, r in usable.drop_duplicates(["trading_date", "candidate"]).iterrows()}
     jobs = []
+    win_cache = {}
     for _, r in keys.iterrows():
         d = date.fromisoformat(r["trading_date"])
         sessions = build_sessions(cal, sched, d, cfg["funding"]["buffer_sec"], cfg["funding"].get("policy", "exit"))
@@ -124,9 +199,17 @@ def main(argv=None):
         sl = lambda df: df.loc[(df.index >= lo) & (df.index <= hi)]
         md = engine.MarketDay(sl(px), sl(opens), sl(closes), {k: sl(v) for k, v in books.items()}, syms)
         params = {k: float(r[k]) for k in ("a", "b", "mu", "sigma", "phi", "phi_ar1", "half_life_min")}
-        jobs.append({"cfg": cfg, "date": r["trading_date"], "cand": r["candidate"], "params": params,
-                     "sessions": sessions, "md": md, "sched": sched, "minutes": day_minutes})
-    print(f"계산 대상 (거래일 x 후보): {len(jobs)}")
+        job = {"cfg": cfg, "date": r["trading_date"], "cand": r["candidate"], "params": params, "model": r["model"],
+               "sessions": sessions, "md": md, "sched": sched, "minutes": day_minutes, "t0": t0}
+        job["level_sd"], job["level_sd_obs"] = level_sd_for(cfg, day_stats, r["trading_date"], r["candidate"])
+        if r["model"] != "linear":
+            wk = (r["trading_date"], r["version"])
+            if wk not in win_cache:
+                wd = slice_window(px, cal.window(d, r["version"]), cfg)
+                win_cache[wk] = {"lnA": wd["lnA"], "lnL": wd["lnL"], "idx": wd["idx_used"]}
+            job["window"] = win_cache[wk]
+        jobs.append(job)
+    print(f"계산 대상 (거래일 x 후보 x 임계값 모형): {len(jobs)}")
     t = time.time()
     if a.processes > 1 and len(jobs) > 1:
         with Pool(a.processes) as p:
@@ -134,7 +217,7 @@ def main(argv=None):
     else:
         results = [run_one(j) for j in jobs]
     print(f"계산 {time.time() - t:.0f}초")
-    res_by = {(r["date"], r["cand"]): r for r in results}
+    res_by = {(r["date"], r["cand"], r["model"]): r for r in results}
     sess_by = {(j["date"], j["cand"]): j["sessions"] for j in jobs}
 
     run_id = logger.new_run_id()
@@ -146,7 +229,7 @@ def main(argv=None):
     dec_rows, trade_rows, sig_rows, fund_rows = [], [], [], []
     for _, g in gate.iterrows():
         key = (g["trading_date"], g["candidate"])
-        rr = res_by.get(key)
+        rr = res_by.get(key + (model_for_rule(cfg, g["gate_rule"]),))
         thr = rr["thr"] if rr else {"ok": False, "reason": "NOT_COMPUTED"}
         res = rr["res"] if rr else {"trades": [], "signals": [], "funding": []}
         gate_trade = g["decision"] == "TRADE"
@@ -172,6 +255,14 @@ def main(argv=None):
             "bertram_entry_z": thr.get("bertram_entry_z", np.nan), "exp_pnl_usd": thr.get("exp_pnl_usd", np.nan),
             "exp_trades": thr.get("exp_trades", np.nan), "cost_roundtrip_z": thr.get("cost_roundtrip_z", np.nan),
             "latent_var_share": thr.get("latent_var_share", np.nan), "threshold_seed": thr.get("seed", -1),
+            "threshold_model": thr.get("model", ""), "estar_phi": thr.get("estar_phi", np.nan),
+            "estar_gamma": thr.get("estar_gamma", np.nan), "estar_delta": thr.get("estar_delta", np.nan), "estar_lags": thr.get("estar_lags", -1),
+            "estar_speed_at_2": thr.get("estar_speed_at_2", np.nan), "estar_reason": thr.get("estar_reason", ""),
+            "exp_funding_usd": thr.get("exp_funding_usd", np.nan),
+            "level_sd": thr.get("level_sd", np.nan), "level_sd_obs": thr.get("level_sd_obs", 0),
+            "day_z_mean": day_stats.get(key, {}).get("mean", np.nan), "day_z_std": day_stats.get(key, {}).get("std", np.nan),
+            "funding_fc_L": thr.get("rate_fc", {}).get(syms["L"], np.nan),
+            "funding_fc_A": thr.get("rate_fc", {}).get(syms["A"], np.nan),
             "final_decision": final, "final_reason": reason, "is_real": is_real,
             "n_trades": len(res["trades"]), "net_pnl": float(sum(tr["net_pnl"] for tr in res["trades"])),
         })
@@ -255,8 +346,15 @@ def main(argv=None):
         hypo_trades=("hypo_n_trades", "sum"), hypo_net_pnl=("hypo_net_pnl", "sum"),
         hypo_net_fee_alt=("hypo_net_pnl_fee_alt", "sum")).reset_index()
     summ.to_csv(os.path.join(report_dir, f"backtest_summary_{run_id}.csv"), index=False, encoding="utf-8-sig")
+    # 임계값 시뮬레이션 보정 점검: 기대(시뮬레이션) vs 실현(가상 매매, 게이트 무시)
+    cal_df = dec[dec["threshold_model"] != ""][["trading_date", "candidate", "gate_rule", "threshold_model", "level_sd",
+                                                "exp_trades", "n_trades", "exp_pnl_usd", "net_pnl", "day_z_mean"]]
+    cal_df.to_csv(os.path.join(report_dir, f"threshold_calibration_{run_id}.csv"), index=False, encoding="utf-8-sig")
+    calib = cal_df.groupby("gate_rule")[["exp_trades", "n_trades", "exp_pnl_usd", "net_pnl"]].sum().round(1)
     print(f"run_id={run_id}  (정산 정책: {cfg['funding'].get('policy', 'exit')}, 대체 수수료 {cfg['costs'].get('fee_alt')})")
     print(summ.round(2).to_string(index=False))
+    print("임계값 보정 점검 (기대 vs 가상 매매 실현, 합계):")
+    print(calib.to_string())
     print(f"감사: {json.dumps({k: v for k, v in aud.items() if k != 'settlement_schedule'}, ensure_ascii=False, default=str)}")
     if not aud["aggregate_ok"] or not aud["funding_ok"]:
         sys.exit("감사 실패")

@@ -88,5 +88,22 @@ class FundingSchedule:
         m = f[(f["symbol"] == sym) & (f["settle_ts"] == t.tz_convert("UTC").floor("s"))]
         return float(m["rate"].iloc[0]) if len(m) else np.nan
 
+    def forecast(self, t0: pd.Timestamp, lookback: int = 6, method: str = "signed") -> dict:
+        """T0 이전에 정산된(=이미 알려진) 펀딩률로 만든 심볼별 예상 펀딩률. 룩어헤드 없음.
+        signed: 최근 lookback 건 평균 (부호 유지), abs: 절댓값 평균 (방향과 무관하게 비용으로 봄).
+        기록이 없으면 0."""
+        out = {}
+        if not len(self.funding):
+            return {sym: 0.0 for sym in self.symbols}
+        t0u = t0.tz_convert("UTC")
+        for sym in self.symbols:
+            f = self.funding
+            r = f.loc[(f["symbol"] == sym) & (f["settle_ts"] < t0u)].sort_values("settle_ts")["rate"].tail(lookback)
+            if not len(r):
+                out[sym] = 0.0
+            else:
+                out[sym] = float(r.abs().mean() if method == "abs" else r.mean())
+        return out
+
     def summary(self) -> dict:
         return {s: {k: (str(v) if isinstance(v, pd.Timestamp) else v) for k, v in i.items()} for s, i in self.info.items()}

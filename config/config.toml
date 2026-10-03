@@ -93,6 +93,11 @@ buffer_sec = 60            # 5절: 정산 앞뒤 60초 동안 주문(진입·청
 # 정산 때 포지션 처리. "exit" = 계획서 원안(정산 전 강제 청산), "hold" = 들고 넘기고 펀딩을 손익에 반영 (2026-10-03 팀 결정)
 # 근거: 가상 매매 36건 중 16건이 정산 전 강제 청산, 평균 -$13.9. 재진입 왕복 수수료 ~$10 > 펀딩 비용(대개 0, 최대 0.06%)
 policy = "hold"
+# 임계값 최적화에 넣는 예상 펀딩률: T0 이전에 정산된 최근 forecast_lookback 건 평균
+# "signed" = 부호 유지 (기댓값), "abs" = 절댓값 (방향 무관하게 비용으로 보는 보수적 가정)
+include_in_thresholds = true
+forecast_lookback = 6
+forecast_method = "signed"
 missing_rate = 0.0         # 펀딩률 기록이 없는 정산의 가정값 (기록 대부분 0). 펀딩 원장에 MISSING_ASSUMED 로 표시
 holding_window_sec = 15    # 10절: 정산 전후 15초 안에 포지션이 있으면 보유로 간주
 
@@ -100,7 +105,9 @@ holding_window_sec = 15    # 10절: 정산 전후 15초 안에 포지션이 있�
 capital_usd = 10000        # 배정 자본 C (진입 시 두 레그 명목가치 합)
 qty_step = 0.001           # 최소 주문 단위 (계약 규격 미확인 -> 가정)
 rearm_after_stop = true    # 손절 뒤 |z| 가 진입선 안쪽으로 돌아와야 재진입
-nonlinear_thresholds = "linear"   # KSS(비선형) 버전 임계값: 1차는 선형과 동일 ("estar" 는 2차)
+# KSS(비선형) 버전 임계값. "estar" = 윈도우에 ESTAR 를 적합해 그 모형 경로로 임계값 최적화 (src/estar.py),
+# 적합 실패(phi 범위 밖, 폭주) 시 선형으로 대체하고 threshold_model 에 표시. "linear" = ADF 버전과 같은 임계값
+nonlinear_thresholds = "estar"
 
 [costs]
 taker_fee = 0.0005         # VIP0 taker 0.05%, 모든 체결 (팀 계정 수수료 등급 확인 전 가정)
@@ -113,12 +120,20 @@ forced_exit_slippage_mult = 2.0   # 강제 청산 슬리피지 배수
 cost_multipliers = [1.0, 1.5, 2.0] # 10절 민감도 (일별 손익에 배수별 열로 기록)
 
 [thresholds]
-entry_grid = [1.0, 1.25, 1.5, 1.75, 2.0, 2.25, 2.5, 2.75, 3.0]
-exit_grid = [-0.5, -0.25, 0.0, 0.25, 0.5]
+estar_max_lags = 10              # ESTAR 의 Δz 래그 상한 (BIC 로 선택)
+estar_max_explode_frac = 0.01    # ESTAR 시뮬레이션 경로 중 |z|>25 에 닿는 비율이 이보다 크면 선형으로 대체
+entry_grid = [0.75, 1.0, 1.25, 1.5, 1.75, 2.0, 2.25, 2.5, 2.75, 3.0]   # 2026-10-04: 0.75 추가 (1.0 이 하한에 붙는 날이 있었음)
+exit_grid = [-1.0, -0.75, -0.5, -0.25, 0.0, 0.25, 0.5]   # 2026-10-04: -1.0, -0.75 추가 (28건 모두 하한 -0.5 였음)
 stop_grid = [3.0, 4.0, 5.0, 6.0, 99.0]   # 99 = 손절 없음
 n_paths = 1000
+# 경로 생성 (2026-10-04). ADF 버전: "block_bootstrap" = 윈도우 실제 z 의 정상 블록 부트스트랩 (Politis-Romano),
+#   "parametric" = AR(1)+관측잡음 모형 (이전 방식). KSS 버전은 [trading] nonlinear_thresholds 를 따른다.
+linear_path_method = "parametric"
+block_len_min = 1440            # block_bootstrap 일 때 평균 블록 길이(분). 짧으면 블록 경계마다 z 가 리셋돼 가짜 평균회귀가 생김 (120분: 기대 수익 2~3배 과대)
+# 표본 밖 수준 이동: 경로마다 z 에 상수 N(0, tau^2) 를 더한다. tau = T0 이전 거래일들의 "그날 z 평균" 의 RMS
+# (윈도우 모수로 계산한 다음 날 z 가 0 에서 얼마나 벗어났는지). 관측이 적으면 기본값.
+level_shift = true
+level_shift_lookback_days = 10
+level_shift_min_obs = 3
+level_shift_sd_default = 2.0       # 관측 3일 미만일 때. 2026-09-23~10-01 실측 RMS 1.7~2.1
 seed = 20261004
-
-[evaluation]
-# 11절 평가를 돌리기 전 최소 거래일 수 (17일 표본에서 게이트 통과 0일 -> 평가 불가 판단, 2026-10-03)
-min_trading_days = 60
